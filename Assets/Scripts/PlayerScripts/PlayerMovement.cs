@@ -35,14 +35,6 @@ public class PlayerMovement : MonoBehaviour
             Move();
             anim.SetBool("IsWalking", moving);
         }
-
-        if( Input.GetMouseButton(1))
-        {
-            if (anim.GetBool("IsSwordEquipped"))
-                anim.SetBool("IsSwordEquipped", false);
-            else
-                anim.SetBool("IsSwordEquipped", true);
-        }
     }
 
     void SetTargetPosition()
@@ -65,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, playerRotation, rotationSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
-        if (transform.position == targetPosition)
+        if (transform.position.x == targetPosition.x && transform.position.z == targetPosition.z)
             moving = false;
     }
 }
