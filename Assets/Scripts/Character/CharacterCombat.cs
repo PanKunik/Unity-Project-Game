@@ -5,6 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterStats))]
 public class CharacterCombat : MonoBehaviour {
 
+    public float attackSpeed = 1f;
+    private float attackCooldown = 0f;
+
+    public float attackDelay = .6f; // delay time to damge for attack animation
+
+    public event System.Action OnAttack;
+
     CharacterStats myStats;
 
     void Start()
@@ -12,8 +19,28 @@ public class CharacterCombat : MonoBehaviour {
         myStats = GetComponent<CharacterStats>();
     }
 
+    void Update()
+    {
+        attackCooldown -= Time.deltaTime;
+    }
+
 	public void Attack( CharacterStats targetStats )
     {
-        targetStats.TakeDamage(myStats.damage.GetValue());
+        if (attackCooldown <= 0)
+        {
+            StartCoroutine(DoDamage(targetStats, attackDelay)); // do damage when animation hits enemy
+
+            if (OnAttack != null)
+                OnAttack();
+
+            attackCooldown = 1f / attackSpeed;
+        }
+    }
+
+    IEnumerator DoDamage( CharacterStats stats, float delay )
+    {
+        yield return new WaitForSeconds(delay);
+
+        stats.TakeDamage(myStats.damage.GetValue());
     }
 }
