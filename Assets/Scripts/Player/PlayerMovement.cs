@@ -1,63 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class PlayerMovement : MonoBehaviour
-{
+[RequireComponent(typeof(NavMeshAgent))]
+public class PlayerMovement : MonoBehaviour {
 
-    Vector3 targetPosition;
-    Vector3 lookAtTarget;
-    Quaternion playerRotation;
-    Animator anim;
+    Transform target;
+    NavMeshAgent nav;
 
-    float rotationSpeed = 15f;
-    float speed = 3f;
-    float camRayLength = 1000f;
-    int floorMask;
-    bool moving = false;
+	// Use this for initialization
+	void Start () {
+        nav = GetComponent<NavMeshAgent>();
+	}
 
-    // Use this for initialization
-    void Awake ()
-    { 
-        floorMask = LayerMask.GetMask("Floor");
-        anim = GetComponent<Animator>();
-    }
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		if(Input.GetMouseButton(0))
-        {
-            SetTargetPosition();
-        }
-
-        if (moving)
-        {
-            Move();
-            anim.SetBool("IsWalking", moving);
-        }
-    }
-
-    void SetTargetPosition()
+    private void Update()
     {
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit floorHit;
-
-        if( Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
+        if( target != null )
         {
-            targetPosition = floorHit.point;
-            // this.transform.LookAt(targetPosition);
-            lookAtTarget = new Vector3(targetPosition.x - transform.position.x, 0, targetPosition.z - transform.position.z);
-            playerRotation = Quaternion.LookRotation(lookAtTarget);
-            moving = true;
+            nav.SetDestination(target.position);
+            FaceTarget();
         }
     }
 
-    void Move()
+    public void MoveToPoint(Vector3 point)
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, playerRotation, rotationSpeed * Time.deltaTime);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        nav.SetDestination(point);
+    }
 
-        if (transform.position.x == targetPosition.x && transform.position.z == targetPosition.z)
-            moving = false;
+    public void FollowTarget(Interactable newTarget)
+    {
+        nav.stoppingDistance = newTarget.radius * .8f;
+        nav.updateRotation = false;
+
+        target = newTarget.interactionTransform;
+    }
+
+    public void StopFollowingTarget()
+    {
+        nav.stoppingDistance = 0f;
+        nav.updateRotation = true;
+
+        target = null;
+    }
+
+    void FaceTarget()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 }
