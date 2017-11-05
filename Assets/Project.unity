@@ -2652,9 +2652,9 @@ GameObject:
   - component: {fileID: 1319306468}
   - component: {fileID: 1319306464}
   - component: {fileID: 1319306469}
+  - component: {fileID: 1319306470}
   - component: {fileID: 1319306462}
   - component: {fileID: 1319306471}
-  - component: {fileID: 1319306470}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2808,10 +2808,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1319306461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddc95f1ccf9368646a6d7c9f0866e0f3, type: 3}
+  m_Script: {fileID: 11500000, guid: c671d1cd9dbba06479ab201c91993352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSpeed: 1
+  attackSpeed: 0.7
+  attackDelay: 0.8
 --- !u!1 &1372136943
 GameObject:
   m_ObjectHideFlags: 0
@@ -4438,7 +4439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc95f1ccf9368646a6d7c9f0866e0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSpeed: 1
+  attackSpeed: 0.4
+  attackDelay: 0.4
 --- !u!1 &1988490430
 GameObject:
   m_ObjectHideFlags: 0
