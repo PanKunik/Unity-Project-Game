@@ -8,26 +8,23 @@ public class CharacterStats : MonoBehaviour {
     public Stat damage;
     public Stat armor;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         currentHealth = maxHealth;
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            TakeDamage(20);
-        }
+        
     }
 
-    public void TakeDamage( int damage )
+    public virtual void TakeDamage( int damage )
     {
         damage -= armor.GetValue();
         damage = Mathf.Clamp(damage, 0, int.MaxValue);
 
         currentHealth -= damage;
-        Debug.Log(transform.name + " takes " + damage + "damage.");
+        Debug.Log(transform.name + " takes " + damage + " damage.");
 
         if(currentHealth <= 0)
         {
@@ -37,6 +34,6 @@ public class CharacterStats : MonoBehaviour {
 
     public virtual void Die()
     {
-        Debug.Log(transform.name + "died.");
+        Debug.Log(transform.name + " died.");
     }
 }
