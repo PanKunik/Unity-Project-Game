@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class PlayerStats : CharacterStats {
+
+    Slider healthBar;
 
     Animator anim;
     PlayerMovement playerMov;
@@ -14,10 +17,18 @@ public class PlayerStats : CharacterStats {
     {
         base.Awake();
         anim = GetComponent<Animator>();
+
+        healthBar = GameObject.Find("HealthBar").GetComponent<Slider>();
         
         playerMov = GetComponent<PlayerMovement>();
         playerControl = GetComponent<PlayerController>();
         Enemy = GameObject.FindWithTag("Enemy").GetComponent<CharacterCombat>();
+    }
+
+    public override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        healthBar.value = currentHealth;
     }
 
     public override void Die()
