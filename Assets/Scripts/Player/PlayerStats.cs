@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerStats : CharacterStats {
 
-    Slider healthBar;
+    Image healthBar;
 
     Animator anim;
     PlayerMovement playerMov;
@@ -18,7 +18,7 @@ public class PlayerStats : CharacterStats {
         base.Awake();
         anim = GetComponent<Animator>();
 
-        healthBar = GameObject.Find("HealthBar").GetComponent<Slider>();
+        healthBar = GameObject.Find("FillHealth").GetComponent<Image>();
         
         playerMov = GetComponent<PlayerMovement>();
         playerControl = GetComponent<PlayerController>();
@@ -28,7 +28,7 @@ public class PlayerStats : CharacterStats {
     public override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
-        healthBar.value = currentHealth;
+        healthBar.fillAmount = (currentHealth / (float)maxHealth);
     }
 
     public override void Die()
