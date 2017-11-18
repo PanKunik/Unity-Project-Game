@@ -11,12 +11,14 @@ public class EnemyStats : CharacterStats {
     int experience;
 
     public GameObject CBTprefabs;
+    PlayerStats playerStats;
 
     protected override void Awake()
     {
         img = transform.Find("EnemyCanvas").Find("HealthSlider").GetComponent<Slider>();
         experience = (int)(5 * Mathf.Log(level+1, 1.1F) * multiplier);
         currentHealth = maxHealth = (int)((100 + 10 * level * Mathf.Sqrt(level)) * multiplier);
+        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
     }
 
     public override void TakeDamage(int amount)
@@ -43,7 +45,8 @@ public class EnemyStats : CharacterStats {
     public override void Die()
     {
         base.Die();
-
+        playerStats.Experience += experience;
         Destroy(gameObject);
+        Debug.Log("Actual EXP: " + playerStats.Experience);
     }
 }

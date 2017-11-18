@@ -13,10 +13,29 @@ public class PlayerStats : CharacterStats {
     PlayerController playerControl;
     CharacterCombat Enemy;
 
+    private int level;
+    private int nextLevelExperience;
+    public int Experience { get; set; }
+
+    void Update()
+    {
+        if( Experience >= nextLevelExperience )
+            LevelUp();
+    }
+
+    void LevelUp()
+    {
+        level++;
+        nextLevelExperience = (int)((level / 2) + Mathf.Log10(2 * level + 1) * 1000 * level);
+        Debug.Log("LEVEL UP! " + level);
+    }
     protected override void Awake()
     {
         base.Awake();
         anim = GetComponent<Animator>();
+        Experience = 0;
+        level = 1;
+        nextLevelExperience = (int)((level/2) + Mathf.Log10(2*level+1) * 1000*level);
 
         healthBar = GameObject.Find("FillHealth").GetComponent<Image>();
         
