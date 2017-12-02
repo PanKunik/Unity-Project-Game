@@ -26,7 +26,6 @@ public class EnemyStats : CharacterStats {
         base.TakeDamage(amount);
         InitCBT(amount.ToString());
         float normalizedHealth = (currentHealth / (float)maxHealth);
-        //FloatingTextController.CreateFloatingText(amount, transform);
         img.value = normalizedHealth;
     }
 
@@ -45,8 +44,10 @@ public class EnemyStats : CharacterStats {
     public override void Die()
     {
         base.Die();
+        
         playerStats.Experience += experience;
-        Destroy(gameObject);
+        InitCBT(experience.ToString());
+        Destroy(gameObject, 3);
         Debug.Log("Actual EXP: " + playerStats.Experience);
     }
 }

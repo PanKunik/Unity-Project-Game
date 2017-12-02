@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class PlayerStats : CharacterStats {
 
     Image healthBar;
+    Image expBar;
+    Text levelTxt;
 
     Animator anim;
     PlayerMovement playerMov;
@@ -21,12 +23,15 @@ public class PlayerStats : CharacterStats {
     {
         if( Experience >= nextLevelExperience )
             LevelUp();
+
+        expBar.fillAmount = (Experience / (float)nextLevelExperience);
     }
 
     void LevelUp()
     {
         level++;
         nextLevelExperience = (int)((level / 2) + Mathf.Log10(2 * level + 1) * 1000 * level);
+        levelTxt.text = level.ToString();
         Debug.Log("LEVEL UP! " + level);
     }
     protected override void Awake()
@@ -38,7 +43,10 @@ public class PlayerStats : CharacterStats {
         nextLevelExperience = (int)((level/2) + Mathf.Log10(2*level+1) * 1000*level);
 
         healthBar = GameObject.Find("FillHealth").GetComponent<Image>();
-        
+        expBar = GameObject.Find("FillXP").GetComponent<Image>();
+        levelTxt = GameObject.Find("Level").GetComponent<Text>();
+        levelTxt.text = level.ToString();
+
         playerMov = GetComponent<PlayerMovement>();
         playerControl = GetComponent<PlayerController>();
         Enemy = GameObject.FindWithTag("Enemy").GetComponent<CharacterCombat>();
