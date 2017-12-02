@@ -11,13 +11,20 @@ public class PlayerStats : CharacterStats {
     Text levelTxt;
 
     Animator anim;
+
     PlayerMovement playerMov;
     PlayerController playerControl;
-    CharacterCombat Enemy;
+    PlayerStats playerStats;
+
+    public GameObject HPRegenPrefab;
+    public GameObject PlayerDamagePrefab;
 
     private int level;
     private int nextLevelExperience;
     public int Experience { get; set; }
+
+    public float combatCooldown = 0f;
+    protected float timeToRegen = 1f;
 
     void Update()
     {
@@ -25,22 +32,20 @@ public class PlayerStats : CharacterStats {
             LevelUp();
 
         expBar.fillAmount = (Experience / (float)nextLevelExperience);
+
+        CheckCombat();
+        timeToRegen -= Time.deltaTime;
     }
 
-    void LevelUp()
-    {
-        level++;
-        nextLevelExperience = (int)((level / 2) + Mathf.Log10(2 * level + 1) * 1000 * level);
-        levelTxt.text = level.ToString();
-        Debug.Log("LEVEL UP! " + level);
-    }
     protected override void Awake()
     {
         base.Awake();
         anim = GetComponent<Animator>();
         Experience = 0;
         level = 1;
-        nextLevelExperience = (int)((level/2) + Mathf.Log10(2*level+1) * 1000*level);
+        nextLevelExperience = (int)((level / 2) + Mathf.Log10(2 * level + 1) * 1000 * level);
+
+        CalculateMaxHelath();
 
         healthBar = GameObject.Find("FillHealth").GetComponent<Image>();
         expBar = GameObject.Find("FillXP").GetComponent<Image>();
@@ -49,13 +54,79 @@ public class PlayerStats : CharacterStats {
 
         playerMov = GetComponent<PlayerMovement>();
         playerControl = GetComponent<PlayerController>();
-        Enemy = GameObject.FindWithTag("Enemy").GetComponent<CharacterCombat>();
+        playerStats = GetComponent<PlayerStats>();
+    }
+
+    void LevelUp()
+    {
+        level++;
+        nextLevelExperience = (int)((level / 2) + Mathf.Log10(2 * level + 1) * 1000 * level);
+        levelTxt.text = level.ToString();
+
+        CalculateMaxHelath();
+        RefreshHealthBar();
+    }
+
+    private void CheckCombat()
+    {
+        if (combatCooldown > 0)
+        {
+            combatCooldown -= Time.deltaTime;
+        }
+        else
+        {
+            RegInTimeHP();
+        }
+    }
+
+    private void RegInTimeHP()
+    {
+        int HPreg = (level * 3 - 1);
+        if (maxHealth > currentHealth && timeToRegen < 0)
+        {
+            if( maxHealth < currentHealth + HPreg )
+            {
+                HPreg = maxHealth - currentHealth;
+                currentHealth = maxHealth;
+            }
+            else
+            {
+                currentHealth += HPreg;
+            }
+            timeToRegen = 3f;
+            InitCBT("+" + HPreg.ToString() + " HP", HPRegenPrefab);
+            RefreshHealthBar();
+        }
+    }
+
+    void InitCBT(string text, GameObject Prefab)
+    {
+        GameObject temp = Instantiate(Prefab) as GameObject;
+        RectTransform tempRect = temp.GetComponent<RectTransform>();
+        temp.transform.SetParent(GameObject.Find("HUD").transform);
+        tempRect.transform.localPosition = Prefab.transform.localPosition;
+        tempRect.transform.localScale = Prefab.transform.localScale;
+        tempRect.transform.localRotation = Prefab.transform.localRotation;
+
+        temp.GetComponent<Text>().text = text;
+    }
+
+    public void CalculateMaxHelath()
+    {
+        currentHealth = maxHealth = (int)((150 + 20 * level * Mathf.Sqrt(level)));
+    }
+
+    public void RefreshHealthBar()
+    {
+         healthBar.fillAmount = (currentHealth / (float)maxHealth);
     }
 
     public override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
-        healthBar.fillAmount = (currentHealth / (float)maxHealth);
+        RefreshHealthBar();
+        InitCBT("-" + damage.ToString() + " HP", PlayerDamagePrefab);
+        combatCooldown = 5f;
     }
 
     public override void Die()
@@ -64,6 +135,6 @@ public class PlayerStats : CharacterStats {
         anim.SetTrigger("Die");
         playerMov.enabled = false;
         playerControl.enabled = false;
-        Enemy.enabled = false;
+        playerStats.enabled = false;
     }
 }

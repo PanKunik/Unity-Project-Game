@@ -30,6 +30,9 @@ public class EnemyStats : CharacterStats {
 
         experience = (int)(5 * Mathf.Log(level+1, 1.1F) * multiplier);
         currentHealth = maxHealth = (int)((100 + 10 * level * Mathf.Sqrt(level)) * multiplier);
+        damage.SetValue((int)((Mathf.Log(level+6,1.3F) * level / 2) *multiplier));
+
+
         playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
 
         // HealthSlider = transform.Find("HealthSlider").gameObject;
@@ -47,6 +50,7 @@ public class EnemyStats : CharacterStats {
         InitCBT(amount.ToString(), CBTprefabs);
         float normalizedHealth = (currentHealth / (float)maxHealth);
         HPSlider.value = normalizedHealth;
+        playerStats.combatCooldown = 5f;
     }
 
     void InitCBT(string text, GameObject Prefab)
@@ -77,7 +81,5 @@ public class EnemyStats : CharacterStats {
         InitCBT("+" + experience.ToString() + " XP", ExpPrefab);
 
         Destroy(gameObject, 3);
-
-        Debug.Log("Actual EXP: " + playerStats.Experience);
     }
 }
