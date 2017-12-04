@@ -123,10 +123,12 @@ public class PlayerStats : CharacterStats {
 
     public override void TakeDamage(int damage)
     {
-        base.TakeDamage(damage);
-        RefreshHealthBar();
-        InitCBT("-" + damage.ToString() + " HP", PlayerDamagePrefab);
-        combatCooldown = 5f;
+		if (currentHealth >= 0) {
+			base.TakeDamage (damage);
+			RefreshHealthBar ();
+			InitCBT ("-" + damage.ToString () + " HP", PlayerDamagePrefab);
+			combatCooldown = 5f;
+		}
     }
 
     public override void Die()
