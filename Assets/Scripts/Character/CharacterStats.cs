@@ -2,7 +2,7 @@
 
 public class CharacterStats : MonoBehaviour {
 
-    public int maxHealth = 100;
+    public int maxHealth;
     public int currentHealth { get; protected set; }
 
     public Stat damage;
@@ -10,7 +10,7 @@ public class CharacterStats : MonoBehaviour {
 
     protected virtual void Awake()
     {
-        currentHealth = maxHealth;
+        // currentHealth = maxHealth;
     }
 
     void Update()
@@ -24,7 +24,7 @@ public class CharacterStats : MonoBehaviour {
         damage = Mathf.Clamp(damage, 0, int.MaxValue);
 
         currentHealth -= damage;
-        Debug.Log(transform.name + " takes " + damage + " damage.");
+        // Debug.Log(transform.name + " takes " + damage + " damage.");
 
         if(currentHealth <= 0)
         {
@@ -34,6 +34,6 @@ public class CharacterStats : MonoBehaviour {
 
     public virtual void Die()
     {
-        Debug.Log(transform.name + " died.");
+        // Debug.Log(transform.name + " died.");
     }
 }
