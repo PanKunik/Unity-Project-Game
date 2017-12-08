@@ -18,12 +18,8 @@ public class ItemPickup : Interactable {
         //Add to inventory
         bool wasPickuped = Inventory.instance.AddToInventory(item);
         if(wasPickuped)
-            StartCoroutine(StartDelay());
-        
+            Destroy(gameObject);
+
     }
-    IEnumerator StartDelay()
-    {
-        yield return new WaitForSeconds(1);
-        Destroy(gameObject);
-    }
+
 }

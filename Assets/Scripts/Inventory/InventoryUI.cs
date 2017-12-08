@@ -6,17 +6,13 @@ public class InventoryUI : MonoBehaviour {
     public static InventoryUI instance;
     public Transform itemsParent;
     Inventory inventory;
-    public bool canChange { get; set; }
     public InventorySlot[] slots { get; set; }
 
-    int sum;
     private void Start()
     {
-        instance = this;
         inventory = Inventory.instance;
         inventory.onItemChangedCallback += UpdateUI;
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
-        
     }
 
     private void Update()
@@ -53,6 +49,11 @@ public class InventoryUI : MonoBehaviour {
             arr[i] = slots[i].GetItem(); 
         }
         inventory.ChangeItems(arr);
+    }
+    
+    public void AddWeapon(Item weapon)
+    {
+        inventory.weapon = weapon;
     }
     
 }

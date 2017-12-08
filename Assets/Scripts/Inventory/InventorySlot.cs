@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler {
+public class InventorySlot : MonoBehaviour {
     Item item;
+    InventorySlot slot;
+    PlayerEquipWeapon playerEquip;
     InventoryUI inventoryUI;
     public Image icon;
     public bool isSelected =false;
@@ -17,6 +19,9 @@ public class InventorySlot : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDr
     private void Awake()
     {
         inventoryUI = GameObject.Find("Inventory").GetComponent<InventoryUI>();
+        playerEquip = GameObject.Find("Player").GetComponent<PlayerEquipWeapon>();
+        slot = GameObject.Find("WeaponSlot").GetComponent<InventorySlot>();
+        slot.icon.enabled = false;
     }
 
     public void AddItem(Item newItem)
@@ -37,6 +42,15 @@ public class InventorySlot : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDr
     private void Update()
     {
         selected.enabled = isSelected;
+        if (slot.icon.enabled)
+        {
+            playerEquip.isArmed = true;
+        }
+        else
+        {
+            playerEquip.isArmed = false;
+        }
+
     }
     public void ClearSlot()
     {
@@ -48,9 +62,47 @@ public class InventorySlot : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDr
     public void OnClicked()
     {
         isSelected = !isSelected;
-        for(int i = 0; i < inventoryUI.slots.Length; i++)
+        for (int i = 0; i < inventoryUI.slots.Length; i++)
         {
+            if (slot.isSelected)
+            {
+                Item temp = slot.item;
+                slot.AddItem(this.item);
+                this.AddItem(temp);
+                slot.isSelected = false;
+                this.isSelected = false;
+                inventoryUI.ChangeInventoryList();
+                inventoryUI.AddWeapon(slot.item);
+
+
+            }
+            else if (inventoryUI.slots[i].isSelected && inventoryUI.slots[i] != this)
+            {
+                Item temp = this.item;
+                this.AddItem(inventoryUI.slots[i].item);
+                inventoryUI.slots[i].AddItem(temp);
+                inventoryUI.slots[i].isSelected = false;
+                isSelected = false;
+                inventoryUI.ChangeInventoryList();
+                inventoryUI.AddWeapon(slot.item);
+                
+
+            }
             
+            
+
+
+        }
+        
+        //selected.enabled = !selected.enabled;
+    }
+
+    public void OnWeaponSlotClicked()
+    {
+        isSelected = !isSelected;
+        for (int i = 0; i < inventoryUI.slots.Length; i++)
+        {
+
             if (inventoryUI.slots[i].isSelected && inventoryUI.slots[i] != this)
             {
                 if (inventoryUI.slots[i] == null)
@@ -58,57 +110,34 @@ public class InventorySlot : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDr
                     Item temp = inventoryUI.slots[i].item;
                     inventoryUI.slots[i].AddItem(this.item);
                     this.AddItem(temp);
+                    Debug.Log("1");
                 }
                 else if (this == null)
                 {
                     Item temp = this.item;
                     this.AddItem(inventoryUI.slots[i].item);
                     inventoryUI.slots[i].AddItem(temp);
+                    Debug.Log("2");
                 }
                 else
                 {
-                    Debug.Log(i);
                     Item temp = this.item;
                     this.AddItem(inventoryUI.slots[i].item);
                     inventoryUI.slots[i].AddItem(temp);
                     inventoryUI.slots[i].isSelected = false;
                     isSelected = false;
                     inventoryUI.ChangeInventoryList();
-                    //this.ClearSlot();
+                    inventoryUI.AddWeapon(slot.item);
+                    //playerEquip.ChangeWeapon(PlayerEquipWeapon.Weapon.tomahawk);
+                    
                 }
 
             }
-          
+
 
 
         }
-            //selected.enabled = !selected.enabled;
     }
 
-    private Vector3 startPosition;
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        startPosition = this.transform.position;
-        
-        if (item)
-        {
-            icon.transform.position = eventData.position;
-        }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (item)
-        {
-            icon.transform.position = eventData.position;
-        }
-     
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (!EventSystem.current.IsPointerOverGameObject())
-            this.transform.position = startPosition;
-    }
+    
 }

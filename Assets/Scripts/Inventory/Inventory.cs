@@ -8,9 +8,10 @@ public class Inventory : MonoBehaviour {
     public int maxSize = 15;
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
-
+    private int size = 0;
     private void Awake()
     {
+        
         if (instance != null)
         {
             return;
@@ -19,18 +20,20 @@ public class Inventory : MonoBehaviour {
     }
 
     public List<Item> items = new List<Item>();
+    public Item weapon;
 
     public bool AddToInventory(Item item)
     {
         if (!item.isDefaultItem)
         {
-            if (items.Count  > maxSize )
+            if (size  >= maxSize )
             {
                 return false;
             }
             else
             {
                 items.Add(item);
+                size++;
                 for (int i = 0; i < items.Count; i++)
                 {
                     if (items[i] == null)
