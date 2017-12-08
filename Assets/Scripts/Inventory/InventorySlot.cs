@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour {
     Item item;
     InventorySlot slot;
-    PlayerEquipWeapon playerEquip;
     InventoryUI inventoryUI;
+    WeaponSwitch weaponSwitch;
     public Image icon;
     public bool isSelected =false;
     public Image selected;
@@ -19,7 +19,7 @@ public class InventorySlot : MonoBehaviour {
     private void Awake()
     {
         inventoryUI = GameObject.Find("Inventory").GetComponent<InventoryUI>();
-        playerEquip = GameObject.Find("Player").GetComponent<PlayerEquipWeapon>();
+        weaponSwitch = GameObject.FindGameObjectWithTag("WeaponHolder").GetComponent<WeaponSwitch>();
         slot = GameObject.Find("WeaponSlot").GetComponent<InventorySlot>();
         slot.icon.enabled = false;
     }
@@ -44,11 +44,13 @@ public class InventorySlot : MonoBehaviour {
         selected.enabled = isSelected;
         if (slot.icon.enabled)
         {
-            playerEquip.isArmed = true;
+            weaponSwitch.isArmed = true;
+            weaponSwitch.SelectWeapon(slot.item.weaponID);
         }
         else
         {
-            playerEquip.isArmed = false;
+            weaponSwitch.isArmed = false;
+            weaponSwitch.DiselectWeapons();
         }
 
     }

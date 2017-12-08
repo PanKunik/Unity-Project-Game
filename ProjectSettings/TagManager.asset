@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Sword
   - Enemy
+  - Inventory
+  - WeaponHolder
   layers:
   - Default
   - TransparentFX
