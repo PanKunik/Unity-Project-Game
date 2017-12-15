@@ -22,10 +22,13 @@ public class EnemyStats : CharacterStats {
     CharacterCombat EnemyCombat;
     EnemyInteract EnemyInteract;
 
+    CapsuleCollider Collider;
+
 
 
     protected override void Awake()
     {
+        Collider = gameObject.GetComponent<CapsuleCollider>();
         HPSlider = transform.Find("EnemyCanvas").Find("HealthSlider").GetComponent<Slider>();
 
         experience = (int)(5 * Mathf.Log(level+1, 1.1F) * multiplier);
@@ -68,6 +71,7 @@ public class EnemyStats : CharacterStats {
     public override void Die()
     {
         base.Die();
+        Collider.enabled = false;
 
         anim.SetTrigger("Die");
 

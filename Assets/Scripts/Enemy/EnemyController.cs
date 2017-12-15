@@ -6,6 +6,10 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour {
 
     public float lookRadius = 10f;
+    public float timeToWalk = 0f;
+    bool notCombat = false;
+
+    public GameObject SpawnPoint;
 
     Transform target;
     NavMeshAgent nav;
@@ -24,6 +28,9 @@ public class EnemyController : MonoBehaviour {
 
         if( distance <= lookRadius )
         {
+            notCombat = false;
+            timeToWalk = 0f;
+
             nav.SetDestination(target.position);
 
             if( distance <= nav.stoppingDistance )
@@ -35,6 +42,23 @@ public class EnemyController : MonoBehaviour {
                 }
 
                 FaceTarget();
+            }
+        }
+        else
+        {
+            if (notCombat)
+            {
+                timeToWalk = Random.Range(10f, 15f);
+                notCombat = false;
+            }
+
+            timeToWalk -= Time.deltaTime;
+
+            if( timeToWalk <= 0f  )
+            {
+                Vector3 destinationPoint = new Vector3(SpawnPoint.transform.position.x + Random.Range(-5,5), SpawnPoint.transform.position.y, SpawnPoint.transform.position.z + Random.Range(-5, 5));
+                nav.SetDestination(destinationPoint);
+                notCombat = true;
             }
         }
 	}
