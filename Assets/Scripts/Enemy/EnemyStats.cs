@@ -54,6 +54,7 @@ public class EnemyStats : CharacterStats {
         float normalizedHealth = (currentHealth / (float)maxHealth);
         HPSlider.value = normalizedHealth;
         playerStats.combatCooldown = 5f;
+        FindObjectOfType<AudioManager>().Play("SwordHit");
     }
 
     void InitCBT(string text, GameObject Prefab)

@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour {
     public GameObject loadingScreen;
     public Slider slider;
 
-	public void PlayGame(int sceneIndex)
+    public void PlayGame(int sceneIndex)
     {
         StartCoroutine(LoadAsynchronously(sceneIndex));
     }
@@ -27,6 +27,11 @@ public class MainMenu : MonoBehaviour {
 
             yield return null;
         }
+    }
+
+    public void PlaySound()
+    {
+        FindObjectOfType<AudioManager>().Play("ButtonClick");
     }
 
     public void QuitGame()
