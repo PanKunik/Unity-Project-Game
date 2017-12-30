@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\Enemy\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyInteract.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyStats.cs" />
+    <Compile Include="Assets\Scripts\Enemy\SpawnEnemy.cs" />
     <Compile Include="Assets\Scripts\Interactions\ChestInteraction.cs" />
     <Compile Include="Assets\Scripts\Interactions\Interactable.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Assets\Scripts\Inventory\InventoryUI.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemPickup.cs" />
+    <Compile Include="Assets\Scripts\ParticleSystemRotate.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerCombat.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerManager.cs" />

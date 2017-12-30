@@ -30,6 +30,13 @@ public class CharacterCombat : MonoBehaviour {
         {
             StartCoroutine(DoDamage(targetStats, attackDelay)); // do damage when animation hits enemy
 
+            if (gameObject.tag == "Enemy")
+            {
+                float atak = Random.Range(0, 2);
+                Animator anim = gameObject.GetComponent<Animator>();
+                anim.SetFloat("Blend", atak);
+                anim.SetTrigger("Attack");
+            }
             // targetStats.TakeDamage(myStats.damage.GetValue());
 
             attackCooldown = 1f / attackSpeed;
