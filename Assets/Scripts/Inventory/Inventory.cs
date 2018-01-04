@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour {
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
     private int size = 0;
+
     private void Awake()
     {
         
@@ -20,7 +21,11 @@ public class Inventory : MonoBehaviour {
     }
 
     public List<Item> items = new List<Item>();
-    public Item weapon;
+
+    private void Update()
+    {
+
+    }
 
     public bool AddToInventory(Item item)
     {
@@ -32,14 +37,13 @@ public class Inventory : MonoBehaviour {
             }
             else
             {
-                items.Add(item);
-                size++;
+                
                 for (int i = 0; i < items.Count; i++)
                 {
                     if (items[i] == null)
                     {
-
-                        DeleteFromInventory(items[i]);
+                        items[i] = item;
+                        size++;
                         break;
                     }
                     
