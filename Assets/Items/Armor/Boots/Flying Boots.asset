@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 663329652a4252c4f999752f01e76178, type: 3}
+  m_Name: Flying Boots
+  m_EditorClassIdentifier: 
+  name: Flying Boots
+  item: {fileID: 1486650091374466, guid: d53d59df88ec7014cbddad058e1fd59c, type: 2}
+  icon: {fileID: 21300000, guid: a6049b40c51b8d94b9afb2f557a95944, type: 3}
+  isDefaultItem: 0
+  itemID: 4
+  value: 7000
+  armor: 0
+  movementSpeed: 2
