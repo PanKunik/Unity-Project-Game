@@ -100,9 +100,7 @@ public class PlayerStats : CharacterStats
         armor.SetValue(armor.GetValue() + 1);
         defaultArmor++;
 
-        weaponMinDamage += 1;
-        weaponMaxDamage += (int)(level * 0.2f);
-
+        
         minDamage.SetValue(minDamage.GetValue() + 1);
         maxDamage.SetValue(maxDamage.GetValue() + ((int)(level * 0.2f)));
 

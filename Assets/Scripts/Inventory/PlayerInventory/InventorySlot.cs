@@ -191,7 +191,7 @@ public class InventorySlot : MonoBehaviour
         else if (armor && playerStats.isUsingArmor)
         {
 
-            print("hello");
+        
             playerStats.isUsingArmor = false;
             SetDefaultArmorStats(playerStats.armorValue);
             playerStats.isUsingArmor = true;
